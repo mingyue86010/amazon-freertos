@@ -1,5 +1,5 @@
 /*
- * FreeRTOS OTA V1.1.1
+ * FreeRTOS OTA V1.2.0
  * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -162,7 +162,8 @@ typedef enum
     eOTA_JobParseErr_ZeroFileSize,        /* Job document specified a zero sized file. This is not allowed. */
     eOTA_JobParseErr_NonConformingJobDoc, /* The job document failed to fulfill the model requirements. */
     eOTA_JobParseErr_BadModelInitParams,  /* There was an invalid initialization parameter used in the document model. */
-    eOTA_JobParseErr_NoContextAvailable   /* There wasn't an OTA context available. */
+    eOTA_JobParseErr_NoContextAvailable,  /* There wasn't an OTA context available. */
+    eOTA_JobParseErr_NoActiveJobs,        /* No active jobs are available in the service. */
 } OTA_JobParseErr_t;
 
 
@@ -404,7 +405,7 @@ typedef struct OTA_FileContext
     {
         int32_t lFileHandle;    /*!< Device internal file pointer or handle.
                                  * File type is handle after file is open for write. */
-        #if WIN32
+        #ifdef WIN32
             FILE * pxFile;      /*!< File type is stdio FILE structure after file is open for write. */
         #endif
         uint8_t * pucFile;      /*!< File type is RAM/Flash image pointer after file is open for write. */
@@ -619,7 +620,7 @@ OTA_State_t OTA_AgentInit_internal( void * pvConnectionContext,
  * returned to the caller.
  *
  * @return One of the OTA agent states from the OTA_State_t enum.
- * A normal shutdown will return eOTA_AgentState_NotReady. Otherwise, refer to the OTA_State_t enum for details.
+ * A normal shutdown will return eOTA_AgentState_Stopped. Otherwise, refer to the OTA_State_t enum for details.
  */
 OTA_State_t OTA_AgentShutdown( TickType_t xTicksToWait );
 
