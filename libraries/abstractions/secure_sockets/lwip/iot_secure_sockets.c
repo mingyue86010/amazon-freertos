@@ -389,6 +389,70 @@ Socket_t SOCKETS_Socket( int32_t lDomain,
 
 /*-----------------------------------------------------------*/
 
+int32_t SOCKETS_Bind( Socket_t xSocket,
+                      SocketsSockaddr_t * pxAddress,
+                      Socklen_t xAddressLength )
+{
+    ss_ctx_t * ctx;
+    int32_t ret;
+    struct sockaddr_in sa_addr = { 0 };
+
+    if( SOCKETS_INVALID_SOCKET == xSocket )
+    {
+        configPRINTF( ( "TCP socket Invalid\n" ) );
+        return SOCKETS_EINVAL;
+    }
+
+    if( pxAddress == NULL )
+    {
+        configPRINTF( ( "TCP socket Invalid Address\n" ) );
+        return SOCKETS_EINVAL;
+    }
+
+    ctx = ( ss_ctx_t * ) xSocket;
+
+    if( NULL == ctx )
+    {
+        configPRINTF( ( "Invalid secure socket passed: Socket=%p\n", ctx ) );
+        return SOCKETS_EINVAL;
+    }
+
+    if( 0 > ctx->ip_socket )
+    {
+        configPRINTF( ( "TCP socket Invalid index\n" ) );
+        return SOCKETS_EINVAL;
+    }
+
+    /*
+     * Setting SO_REUSEADDR socket option in order to be able to bind to the same ip:port again
+     * without netconn_bind failing.
+     */
+    #if SO_REUSE
+        ret = lwip_setsockopt( ctx->ip_socket, SOL_SOCKET, SO_REUSEADDR, &( uint32_t ) { 1 }, sizeof( uint32_t ) );
+
+        if( 0 > ret )
+        {
+            return SOCKETS_SOCKET_ERROR;
+        }
+    #endif /* SO_REUSE */
+
+    sa_addr.sin_family = pxAddress->ucSocketDomain ? pxAddress->ucSocketDomain : AF_INET;
+    sa_addr.sin_addr.s_addr = pxAddress->ulAddress;
+    sa_addr.sin_port = pxAddress->usPort;
+
+    ret = lwip_bind( ctx->ip_socket, ( struct sockaddr * ) &sa_addr, sizeof( sa_addr ) );
+
+    if( 0 > ret )
+    {
+        configPRINTF( ( "lwip_bind fail :%d\n", ret ) );
+        return SOCKETS_SOCKET_ERROR;
+    }
+
+    return SOCKETS_ERROR_NONE;
+}
+
+/*-----------------------------------------------------------*/
+
 int32_t SOCKETS_Connect( Socket_t xSocket,
                          SocketsSockaddr_t * pxAddress,
                          Socklen_t xAddressLength )
@@ -616,7 +680,7 @@ int32_t SOCKETS_SetSockOpt( Socket_t xSocket,
                             size_t xOptionLength )
 {
     ss_ctx_t * ctx;
-    int ret;
+    int ret = 0;
     char ** ppcAlpnIn = ( char ** ) pvOptionValue;
     size_t xLength = 0;
     uint32_t ulProtocol;
@@ -809,11 +873,59 @@ int32_t SOCKETS_SetSockOpt( Socket_t xSocket,
 
             break;
 
+        case SOCKETS_SO_TCPKEEPALIVE:
+
+            ret = lwip_setsockopt( ctx->ip_socket,
+                                   SOL_SOCKET,
+                                   SO_KEEPALIVE,
+                                   pvOptionValue,
+                                   sizeof( int ) );
+
+            break;
+
+            #if LWIP_TCP_KEEPALIVE
+                case SOCKETS_SO_TCPKEEPALIVE_INTERVAL:
+
+                    ret = lwip_setsockopt( ctx->ip_socket,
+                                           IPPROTO_TCP,
+                                           TCP_KEEPINTVL,
+                                           pvOptionValue,
+                                           sizeof( int ) );
+
+                    break;
+
+                case SOCKETS_SO_TCPKEEPALIVE_COUNT:
+
+                    ret = lwip_setsockopt( ctx->ip_socket,
+                                           IPPROTO_TCP,
+                                           TCP_KEEPCNT,
+                                           pvOptionValue,
+                                           sizeof( int ) );
+
+                    break;
+
+                case SOCKETS_SO_TCPKEEPALIVE_IDLE_TIME:
+
+                    ret = lwip_setsockopt( ctx->ip_socket,
+                                           IPPROTO_TCP,
+                                           TCP_KEEPIDLE,
+                                           pvOptionValue,
+                                           sizeof( int ) );
+
+                    break;
+            #endif /* if LWIP_TCP_KEEPALIVE */
+
+
         default:
             return SOCKETS_ENOPROTOOPT;
     }
 
-    return SOCKETS_ERROR_NONE;
+    if( 0 > ret )
+    {
+        return SOCKETS_SOCKET_ERROR;
+    }
+
+    return ret;
 }
 
 /*-----------------------------------------------------------*/

@@ -79,7 +79,7 @@ target_sources(
         ${driver_src}
         "${AFR_KERNEL_DIR}/portable/GCC/ARM_CM4F/port.c"
         "${AFR_KERNEL_DIR}/portable/GCC/ARM_CM4F/portmacro.h"
-        "${AFR_KERNEL_DIR}/portable/MemMang/$<IF:${AFR_IS_TESTING},heap_4.c,heap_5.c>"
+        "${AFR_KERNEL_DIR}/portable/MemMang/heap_5.c"
 )
 set(
     kernel_inc_dirs
@@ -153,6 +153,14 @@ target_sources(
         "${afr_ports_dir}/common_io/iot_spi.c"
         # test code
         $<${AFR_IS_TESTING}:${afr_ports_dir}/common_io/iot_test_common_io_internal.c>
+)
+
+target_include_directories(
+    AFR::common_io::mcu_port
+    INTERFACE
+        "${AFR_MODULES_ABSTRACTIONS_DIR}/platform/freertos/include"
+        # test code
+        $<${AFR_IS_TESTING}:${AFR_MODULES_ABSTRACTIONS_DIR}/common_io/test>
 )
 
 # -------------------------------------------------------------------------------------------------
