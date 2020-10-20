@@ -47,6 +47,11 @@
 /* MQTT include. */
 #include "iot_mqtt.h"
 
+//Ming: Metrics
+#if (FREERTOS_LWIP_METRICS_ENABLE == 1)
+#include "metrics/metrics.h"
+#endif
+
 /**
  * @cond DOXYGEN_IGNORE
  * Doxygen should ignore this section.
@@ -831,6 +836,16 @@ int RunMqttDemo( bool awsIotMqttMode,
     {
         IotMqtt_Disconnect( mqttConnection, 0 );
     }
+
+    //Ming: Metrics print
+    IotLogInfo("---- Ming Test ----\n");
+    #if (FREERTOS_LWIP_METRICS_ENABLE == 1)
+    metric_update();
+    metric_display();
+    metric_clean();
+    #endif
+    IotLogInfo("---- END ----\n");
+
 
     /* Clean up libraries if they were initialized. */
     if( librariesInitialized == true )
