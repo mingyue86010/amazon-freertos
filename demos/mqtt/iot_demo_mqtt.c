@@ -48,6 +48,7 @@
 #include "iot_mqtt.h"
 
 //Ming: Metrics
+#include "lwipopts.h"
 #if (FREERTOS_LWIP_METRICS_ENABLE == 1)
 #include "metrics/metrics.h"
 #endif
@@ -840,9 +841,10 @@ int RunMqttDemo( bool awsIotMqttMode,
     //Ming: Metrics print
     IotLogInfo("---- Ming Test ----\n");
     #if (FREERTOS_LWIP_METRICS_ENABLE == 1)
-    metric_update();
-    metric_display();
-    metric_clean();
+    IotLogInfo("---- Here ----\n");
+    metric_update( &_networkMetrics );
+    metric_display( &_networkMetrics );
+    metric_clean( &_networkMetrics );
     #endif
     IotLogInfo("---- END ----\n");
 

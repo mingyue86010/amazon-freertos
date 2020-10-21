@@ -1018,6 +1018,11 @@
               <FileType>5</FileType>
               <FilePath>../../../../../demos/include/iot_demo_runner.h</FilePath>
             </File>
+            <File>
+              <FileName>network_metrics.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\demos\include\network_metrics.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3286,28 +3291,18 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>libraries/3rdparty/lwip/src/metrics</GroupName>
-          <Files>
-            <File>
-              <FileName>metrics.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\libraries\3rdparty\lwip\src\metrics\metrics.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>libraries/3rdparty/lwip/contrib/ports/freertos/</GroupName>
         </Group>
         <Group>
           <GroupName>libraries/3rdparty/lwip/contrib/ports/freertos/include/arch/</GroupName>
         </Group>
         <Group>
-          <GroupName>libraries/3rdparty/lwip/src/include/metrics</GroupName>
+          <GroupName>demos/network_metrics</GroupName>
           <Files>
             <File>
-              <FileName>metrics.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\libraries\3rdparty\lwip\src\include\metrics\metrics.h</FilePath>
+              <FileName>network_metrics.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\demos\network_metrics\network_metrics.c</FilePath>
             </File>
           </Files>
         </Group>
