@@ -1,0 +1,16 @@
+{
+    "board_full_name": "cypress.cypress64",
+    "iotrc": {
+        "thing": "__test_infra_11117fcb71024be48458f43987625e22"
+    },
+    "test_groups": [
+        "BLE_Unit_MQTT_Serialize"
+    ],
+    "blocked_tests": [],
+    "changed_files": [
+        "/workspace/GitRepos/amazon-freertos/tests/common/aws_test_runner.c",
+        "/workspace/GitRepos/amazon-freertos/tests/include/aws_clientcredential.h",
+        "/workspace/GitRepos/amazon-freertos/tests/include/aws_clientcredential_keys.h",
+        "/workspace/GitRepos/amazon-freertos/libraries/abstractions/wifi/test/iot_test_wifi.h"
+    ]
+}

@@ -75,7 +75,7 @@ else
 TFM_PSOC64_PATH=$(CY_EXTAPP_PATH)/psoc6/psoc64tfm
 TFM_PSOC64_SECURE_POLICY_PATH=$(TFM_PSOC64_PATH)/security/policy
 TFM_POLICY_FILE=$(TFM_PSOC64_SECURE_POLICY_PATH)/$(CY_SECURE_POLICY_NAME)_jitp.json
-TFM_SIGN_SCRIPT=cysecuretools
+TFM_SIGN_SCRIPT=/Library/Frameworks/Python.framework/Versions/3.8/bin/cysecuretools
 TFM_DEVICE_NAME=cy8ckit-064s0s2-4343w
 TFM_CM0_HEX= $(TFM_PSOC64_PATH)/COMPONENT_TFM_S_FW/tfm_s_unsigned.hex
 
