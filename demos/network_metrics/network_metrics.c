@@ -152,3 +152,4 @@ LwipMetricStatus_t lwipGetNetworkStats( NetworkStats_t * pOutNetworkStats )
 }
 
 #endif //FREERTOS_LWIP_METRICS_ENABLE
+
