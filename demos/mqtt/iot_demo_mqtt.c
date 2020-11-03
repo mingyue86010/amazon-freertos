@@ -841,11 +841,44 @@ int RunMqttDemo( bool awsIotMqttMode,
     //Ming: Metrics print
     IotLogInfo("---- Ming Test ----\n");
     #if (FREERTOS_LWIP_METRICS_ENABLE == 1)
-    IotLogInfo("---- Here ----\n");
-    metric_update( &_networkMetrics );
-    metric_display( &_networkMetrics );
-    metric_clean( &_networkMetrics );
+    IotLogInfo("---- Start Here ----\n");
+    NetworkStats_t NetworkStats;
+    Connection_t EstablishedConnnectionsArray[5] = {0};
+    uint32_t NumEstablishedConnections = 0;
+    uint16_t ListenPortsArray[10] = {0};
+    uint32_t NumOpenPorts = 0;
+    uint32_t idx = 0;
+
+    (void)lwipGetNetworkStats( &NetworkStats );
+    (void)lwipGetEstablishedConnections( EstablishedConnnectionsArray,
+                                         5,
+                                         &NumEstablishedConnections );
+    (void)lwipGetOpenTcpPorts( ListenPortsArray,
+                               10,
+                               &NumOpenPorts );
+
+
+	IotLogInfo( "packet-in: %d", NetworkStats.packetsReceived );
+	IotLogInfo( "packet-out: %d", NetworkStats.packetsSent );
+	IotLogInfo( "bytes-in-sta: %d", NetworkStats.bytesReceived );
+	IotLogInfo( "bytes-out-sta: %d", NetworkStats.bytesSent );
+
+    IotLogInfo( "#Remote Connections: %d", NumEstablishedConnections );
+
+    for (int i = 0; i < 5; ++i){
+        if ( 0 == EstablishedConnnectionsArray[i].localPort ){
+            break;
+        }
+        IotLogInfo( "Local port: %d", EstablishedConnnectionsArray[i].localPort );
+		IotLogInfo( "Local IP Address: %s", ipaddr_ntoa(((const ip_addr_t *)&EstablishedConnnectionsArray[i].localIp))); 
+		IotLogInfo( "Remote port: %d", EstablishedConnnectionsArray[i].remotePort );
+		IotLogInfo( "Remote IP Address: %s", ipaddr_ntoa(((const ip_addr_t *)&EstablishedConnnectionsArray[i].remoteIp))); 
+    }
+    
+    IotLogInfo( "#Listen ports: %d", NumOpenPorts );
+
     #endif
+    
     IotLogInfo("---- END ----\n");
 
 
