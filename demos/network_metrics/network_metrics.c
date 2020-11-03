@@ -58,7 +58,7 @@ LwipMetricStatus_t lwipGetOpenTcpPorts( uint16_t * pOutPortsArray,
 
 	if( ( pOutPortsArray != NULL ) && ( pcbCnt > portsArrayLength ) )
 	{
-		//warning
+		IotLogWarn( "The portsArrayLength is not long engough to store all the listening ports" );
 	}
 
     if( status == LwipMetricSuccess )
@@ -119,7 +119,7 @@ LwipMetricStatus_t lwipGetEstablishedConnections( Connection_t * pOutConnections
 
 	if( ( pOutConnectionsArray != NULL ) && ( pcbCnt > connectionsArrayLength ) )
 	{
-		IotLogWarn( "The connectionsArrayLength is not long engough to hold the" );
+		IotLogWarn( "The connectionsArrayLength is not long engough to store all the established connections" );
 	}
 
     if( status == LwipMetricSuccess )
