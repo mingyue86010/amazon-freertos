@@ -63,8 +63,7 @@ extern LwipMetricStatus_t lwipGetEstablishedConnections( Connection_t * pOutConn
                                                          uint32_t connectionsArrayLength,
                                                          uint32_t * pOutNumEstablishedConnections );
 extern LwipMetricStatus_t lwipGetOpenTcpPorts( uint16_t * pOutPortsArray,
-                                            uint32_t portsArrayLength,
-                                            uint32_t * pOutNumOpenPorts );
-
+                                               uint32_t portsArrayLength,
+                                               uint32_t * pOutNumOpenPorts );
 
 #endif //__METRICS_H__

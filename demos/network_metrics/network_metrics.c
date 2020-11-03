@@ -16,13 +16,13 @@
 
 #if ( FREERTOS_LWIP_METRICS_ENABLE == 1 )
 
-extern struct tcp_pcb *tcp_active_pcbs; /* List of all TCP PCBs that are in a state in which they accept or send data. */
+extern struct tcp_pcb *tcp_active_pcbs; 		/* List of all TCP PCBs that are in a state in which they accept or send data. */
 extern union tcp_listen_pcbs_t tcp_listen_pcbs; /* List of all TCP PCBs in LISTEN state */
 
 
 LwipMetricStatus_t lwipGetOpenTcpPorts( uint16_t * pOutPortsArray,
-                                            uint32_t portsArrayLength,
-                                            uint32_t * pOutNumOpenPorts )
+                                        uint32_t portsArrayLength,
+                                        uint32_t * pOutNumOpenPorts )
 {
 	LwipMetricStatus_t status = LwipMetricSuccess;
 	struct tcp_pcb_listen *pCurrPcb = tcp_listen_pcbs.listen_pcbs;
@@ -105,10 +105,7 @@ LwipMetricStatus_t lwipGetEstablishedConnections( Connection_t * pOutConnections
 				ip_addr_copy(pEstablishedConnection->remoteIp, pCurrPcb->remote_ip);	// network byte order
 				ip_addr_copy(pEstablishedConnection->localIp, pCurrPcb->local_ip);		// network byte order
 				pEstablishedConnection->localPort = pCurrPcb->local_port;; 				// host byte order 
-				// For listen connection, this is invalid. 
-				// Use tcp_listen_pcbs.pcbs instead of tcp_listen_pcbs.tcp_pcb_listen, 
-				// so that it can share the code with remote connections.
-				pEstablishedConnection->remotePort = pCurrPcb->remote_port;				
+				pEstablishedConnection->remotePort = pCurrPcb->remote_port;				// host byte order 
 			}
 
 			++pcbCnt;
