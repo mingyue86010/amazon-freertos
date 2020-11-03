@@ -25,17 +25,17 @@ LwipMetricStatus_t lwipGetOpenTcpPorts( uint16_t * pOutPortsArray,
                                             uint32_t * pOutNumOpenPorts )
 {
 	LwipMetricStatus_t status = LwipMetricSuccess;
-	struct tcp_pcb *pCurrPcb = tcp_listen_pcbs.listen_pcbs;
+	struct tcp_pcb_listen *pCurrPcb = tcp_listen_pcbs.listen_pcbs;
 	uint16_t pcbCnt = 0;
 	
 	if( ( ( pOutPortsArray != NULL ) && ( portsArrayLength == 0 ) ) ||
     ( pOutNumOpenPorts == NULL ) )
     {
-		IotLogError( ( "Invalid parameters. pLwipPcbsList: %p, pOutPortsArray: %p,"
-                    " portsArrayLength: %u, pOutNumOpenPorts: %p.",
+		IotLogError( "Invalid parameters. pOutPortsArray: 0x%08x,"
+                    "portsArrayLength: %u, pOutNumOpenPorts: 0x%08x.",
                     pOutPortsArray,
                     portsArrayLength,
-                    pOutNumOpenPorts ) );
+                    pOutNumOpenPorts );
         status = LwipMetricBadParameter;
     }
 
@@ -83,11 +83,11 @@ LwipMetricStatus_t lwipGetEstablishedConnections( Connection_t * pOutConnections
 	if( ( ( pOutConnectionsArray != NULL ) && ( connectionsArrayLength == 0 ) ) ||
     ( pOutNumEstablishedConnections == NULL ) )
     {
-		IotLogError( ( "Invalid parameters. pLwipPcbsList: %p, pOutConnectionsArray: %p,"
-                    " connectionsArrayLength: %u, pOutNumEstablishedConnections: %p.",
+		IotLogError( "Invalid parameters. pOutConnectionsArray: 0x%08x,"
+                    " connectionsArrayLength: %u, pOutNumEstablishedConnections: 0x%08x.",
                     pOutConnectionsArray,
                     connectionsArrayLength,
-                    pOutNumEstablishedConnections ) );
+                    pOutNumEstablishedConnections );
         status = LwipMetricBadParameter;
     }
 
@@ -137,7 +137,7 @@ LwipMetricStatus_t lwipGetNetworkStats( NetworkStats_t * pOutNetworkStats )
 
     if( pOutNetworkStats == NULL )
     {
-        IotLogError( ( "Invalid parameters. pOutNetworkStats: %p", pOutNetworkStats ) );
+        IotLogError( "Invalid parameters. pOutNetworkStats: 0x%08x", pOutNetworkStats );
         status = LwipMetricBadParameter;
     }
 
@@ -152,18 +152,6 @@ LwipMetricStatus_t lwipGetNetworkStats( NetworkStats_t * pOutNetworkStats )
 	}
 	
 	return status;
-}
-
-
-void metric_update( networkMetrics_t *pMetric ) {
-	LOCK_TCPIP_CORE();
-	pMetric->pktsIn = LWIP_GET_TCP_PACKET_IN();
-    pMetric->pktsOut = LWIP_GET_TCP_PACKET_OUT();
-    pMetric->bytesIn = LWIP_GET_NETIF_PACKET_IN_sta();
-    pMetric->bytesOut = LWIP_GET_NETIF_PACKET_OUT_sta();
-	pMetric->numOfActiveConnections = lwipPcbTriverse( tcp_active_pcbs, &_networkMetrics.remoteConnectionList );
-	pMetric->numOfListenConnections = lwipPcbTriverse( tcp_listen_pcbs.pcbs, &_networkMetrics.listenConnectionList ); //tcp_listen_pcbs.tcp_pcb_listen
-	UNLOCK_TCPIP_CORE();
 }
 
 #endif //FREERTOS_LWIP_METRICS_ENABLE
