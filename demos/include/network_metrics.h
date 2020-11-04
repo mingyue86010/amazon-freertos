@@ -5,7 +5,7 @@
 #include <stdint.h>
 /* Lwip includes */
 #include "lwipopts.h"
-#include "lwip/ip_addr.h" 
+#include "lwip/ip_addr.h"
 
 
 #if !defined( FREERTOS_LWIP_METRICS_ENABLE ) || ( FREERTOS_LWIP_METRICS_ENABLE == 0 )
@@ -20,6 +20,9 @@
 /* Extern veriables from LWIP */
 extern struct netif sta_if, ap_if;
 
+/**
+ * @brief Return codes from metrics collector APIs.
+ */
 typedef enum
 {
     LwipMetricSuccess = 0,
@@ -49,14 +52,14 @@ typedef struct NetworkStats
 } NetworkStats_t;
 
 
-#define LWIP_GET_TCP_PACKET_IN() (lwip_stats.mib2.ipinreceives)
-#define LWIP_GET_TCP_PACKET_OUT() (lwip_stats.mib2.ipoutrequests + lwip_stats.mib2.ipforwdatagrams)	//need review
+#define LWIP_GET_TCP_PACKET_IN()           ( lwip_stats.mib2.ipinreceives )
+#define LWIP_GET_TCP_PACKET_OUT()          ( lwip_stats.mib2.ipoutrequests + lwip_stats.mib2.ipforwdatagrams ) /*need review */
 
-#define LWIP_GET_NETIF_PACKET_IN_sta() (sta_if.mib2_counters.ifinoctets)
-#define LWIP_GET_NETIF_PACKET_OUT_sta() (sta_if.mib2_counters.ifoutoctets)
+#define LWIP_GET_NETIF_PACKET_IN_sta()     ( sta_if.mib2_counters.ifinoctets )
+#define LWIP_GET_NETIF_PACKET_OUT_sta()    ( sta_if.mib2_counters.ifoutoctets )
 
-#define LWIP_GET_NETIF_PACKET_IN_ap() (ap_if.mib2_counters.ifinoctets)
-#define LWIP_GET_NETIF_PACKET_OUT_ap() (ap_if.mib2_counters.ifoutoctets)
+#define LWIP_GET_NETIF_PACKET_IN_ap()      ( ap_if.mib2_counters.ifinoctets )
+#define LWIP_GET_NETIF_PACKET_OUT_ap()     ( ap_if.mib2_counters.ifoutoctets )
 
 extern LwipMetricStatus_t lwipGetNetworkStats( NetworkStats_t * pOutNetworkStats );
 extern LwipMetricStatus_t lwipGetEstablishedConnections( Connection_t * pOutConnectionsArray,
@@ -67,4 +70,3 @@ extern LwipMetricStatus_t lwipGetOpenTcpPorts( uint16_t * pOutPortsArray,
                                                uint32_t * pOutNumOpenPorts );
 
 #endif //__METRICS_H__
-
