@@ -32,8 +32,12 @@
 #ifndef _IOT_BLE_CONFIG_H_
 #define _IOT_BLE_CONFIG_H_
 
-/* Device name for this peripheral device. */
-#define IOT_BLE_DEVICE_COMPLETE_LOCAL_NAME                      "CY8C"
+#define IOT_BLE_DEVICE_COMPLETE_LOCAL_NAME                     "TEST_CY64"
+#define IOT_BLE_ENABLE_NUMERIC_COMPARISON        ( 0 )
+#define IOT_BLE_ENABLE_SECURE_CONNECTION         ( 0 )
+#define IOT_BLE_INPUT_OUTPUT                     ( eBTIONone )
+
+#define IOT_BLE_ENABLE_BONDING ( 0 )
 
 /**
  * Buffer size for network interface shim layer. The config is to
@@ -43,5 +47,8 @@
 
 /* Include BLE default config at bottom to set the default values for the configurations which are not overridden */
 #include "iot_ble_config_defaults.h"
+
+
+
 
 #endif /* _IOT_BLE_CONFIG_H_ */
