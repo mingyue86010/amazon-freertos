@@ -31,14 +31,14 @@
  *
  * @todo Set this to the fully-qualified DNS name of your MQTT broker.
  */
-#define clientcredentialMQTT_BROKER_ENDPOINT         ""
+#define clientcredentialMQTT_BROKER_ENDPOINT "a31zvyed820ljz-ats.iot.us-west-2.amazonaws.com"
 
 /*
  * @brief Host name.
  *
  * @todo Set this to the unique name of your IoT Thing.
  */
-#define clientcredentialIOT_THING_NAME               ""
+#define clientcredentialIOT_THING_NAME "TEST_DEVICE"
 
 /*
  * @brief Port number the MQTT broker is using.
@@ -55,13 +55,13 @@
  *
  * @todo If you are using Wi-Fi, set this to your network name.
  */
-#define clientcredentialWIFI_SSID                    ""
+#define clientcredentialWIFI_SSID "LJM_TPLINK"
 
 /*
  * @brief Password needed to join Wi-Fi network.
  * @todo If you are using WPA, set this to your network password.
  */
-#define clientcredentialWIFI_PASSWORD                ""
+#define clientcredentialWIFI_PASSWORD "Anya0102"
 
 /*
  * @brief Wi-Fi network security type.
@@ -71,6 +71,6 @@
  * @note Possible values are eWiFiSecurityOpen, eWiFiSecurityWEP, eWiFiSecurityWPA,
  * eWiFiSecurityWPA2 (depending on the support of your device Wi-Fi radio).
  */
-#define clientcredentialWIFI_SECURITY                eWiFiSecurityWPA2
+#define clientcredentialWIFI_SECURITY eWiFiSecurityWPA2
 
 #endif /* ifndef __AWS_CLIENTCREDENTIAL__H__ */

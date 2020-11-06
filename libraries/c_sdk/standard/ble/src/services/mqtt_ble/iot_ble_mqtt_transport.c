@@ -1016,7 +1016,7 @@ int32_t IotBleMqttTransportSend( NetworkContext_t * pContext,
     {
         packetType = DECODE_PACKET_TYPE( pBuf[ 0 ] );
 
-        LogError( ( "packet type is %d ", packetType ) );
+        LogDebug( ( "packet type is %d ", packetType ) );
 
         switch( packetType )
         {

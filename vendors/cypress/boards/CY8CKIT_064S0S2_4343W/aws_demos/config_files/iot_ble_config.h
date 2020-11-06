@@ -32,12 +32,14 @@
 #ifndef _IOT_BLE_CONFIG_H_
 #define _IOT_BLE_CONFIG_H_
 
-#define IOT_BLE_DEVICE_COMPLETE_LOCAL_NAME                     "TEST_CY64"
+#define IOT_BLE_DEVICE_COMPLETE_LOCAL_NAME                     "TEST_cypress64"
 #define IOT_BLE_ENABLE_NUMERIC_COMPARISON        ( 0 )
 #define IOT_BLE_ENABLE_SECURE_CONNECTION         ( 0 )
 #define IOT_BLE_INPUT_OUTPUT                     ( eBTIONone )
 
 #define IOT_BLE_ENABLE_BONDING ( 0 )
+
+#define IOT_BLE_ENCRYPTION_REQUIRED               ( 0 )
 
 /**
  * Buffer size for network interface shim layer. The config is to
