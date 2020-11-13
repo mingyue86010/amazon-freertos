@@ -78,6 +78,13 @@
 /* Include header for root CA certificates. */
 #include "iot_default_root_certificates.h"
 
+/* Set up logging for this demo. */
+#include "iot_demo_logging.h"
+
+#if (FREERTOS_LWIP_METRICS_ENABLE == 1)
+#include "metrics_collector.h"
+#endif
+
 /*------------- Demo configurations -------------------------*/
 
 /** Note: The device client certificate and private key credentials are
@@ -512,6 +519,50 @@ int RunCoreMqttMutualAuthDemo( bool awsIotMqttMode,
             xMQTTStatus = MQTT_Disconnect( &xMQTTContext );
         }
 
+				
+				
+        //Ming: Metrics print
+        IotLogInfo("---- Ming Test ----\n");
+        #if (FREERTOS_LWIP_METRICS_ENABLE == 1)
+            IotLogInfo("-- Lwip Metric Start Here --\n");
+            NetworkStats_t NetworkStats;
+            Connection_t EstablishedConnnectionsArray[5] = {0};
+            uint32_t NumEstablishedConnections = 0;
+            uint16_t ListenPortsArray[10] = {0};
+            uint32_t NumOpenPorts = 0;
+            uint32_t idx = 0;
+
+            (void)lwipGetNetworkStats( &NetworkStats );
+            (void)lwipGetEstablishedConnections( EstablishedConnnectionsArray,
+                                                5,
+                                                &NumEstablishedConnections );
+            (void)lwipGetOpenTcpPorts( ListenPortsArray,
+                                    10,
+                                    &NumOpenPorts );
+
+            IotLogInfo( "packet-in: %d", NetworkStats.packetsReceived );
+            IotLogInfo( "packet-out: %d", NetworkStats.packetsSent );
+            IotLogInfo( "bytes-in-sta: %d", NetworkStats.bytesReceived );
+            IotLogInfo( "bytes-out-sta: %d", NetworkStats.bytesSent );
+
+            IotLogInfo( "#Remote Connections: %d", NumEstablishedConnections );
+
+            for (int i = 0; i < 5; ++i){
+                if ( 0 == EstablishedConnnectionsArray[i].localPort ){
+                    break;
+                }
+                IotLogInfo( "Local port: %d", EstablishedConnnectionsArray[i].localPort );
+                IotLogInfo( "Local IP Address: %s", ipaddr_ntoa(((const ip_addr_t *)&EstablishedConnnectionsArray[i].localIp))); 
+                IotLogInfo( "Remote port: %d", EstablishedConnnectionsArray[i].remotePort );
+                IotLogInfo( "Remote IP Address: %s", ipaddr_ntoa(((const ip_addr_t *)&EstablishedConnnectionsArray[i].remoteIp))); 
+            }
+
+            IotLogInfo( "#Listen ports: %d", NumOpenPorts );
+						IotLogInfo("-- Lwip Metric End --\n");
+        #endif
+				IotLogInfo("---- Ming Test End ----\n");
+				
+				
         /* We will always close the network connection, even if an error may have occurred during
          * demo execution, to clean up the system resources that it may have consumed. */
         if( xIsConnectionEstablished == pdTRUE )

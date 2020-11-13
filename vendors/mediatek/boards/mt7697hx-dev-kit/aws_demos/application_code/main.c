@@ -23,6 +23,8 @@
  * http://www.FreeRTOS.org
  */
 
+#include <string.h>
+
 /* FreeRTOS includes. */
 #include "FreeRTOS.h"
 #include "task.h"
