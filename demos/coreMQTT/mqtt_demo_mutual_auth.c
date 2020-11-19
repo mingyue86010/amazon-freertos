@@ -81,6 +81,7 @@
 /* Set up logging for this demo. */
 #include "iot_demo_logging.h"
 
+#include "lwipopts.h"
 #if (FREERTOS_LWIP_METRICS_ENABLE == 1)
 #include "metrics_collector.h"
 #endif
@@ -518,11 +519,7 @@ int RunCoreMqttMutualAuthDemo( bool awsIotMqttMode,
             LogInfo( ( "Disconnecting the MQTT connection with %s.", democonfigMQTT_BROKER_ENDPOINT ) );
             xMQTTStatus = MQTT_Disconnect( &xMQTTContext );
         }
-
 				
-				
-        //Ming: Metrics print
-        IotLogInfo("---- Ming Test ----\n");
         #if (FREERTOS_LWIP_METRICS_ENABLE == 1)
             IotLogInfo("-- Lwip Metric Start Here --\n");
             NetworkStats_t NetworkStats;
@@ -560,8 +557,6 @@ int RunCoreMqttMutualAuthDemo( bool awsIotMqttMode,
             IotLogInfo( "#Listen ports: %d", NumOpenPorts );
 						IotLogInfo("-- Lwip Metric End --\n");
         #endif
-				IotLogInfo("---- Ming Test End ----\n");
-				
 				
         /* We will always close the network connection, even if an error may have occurred during
          * demo execution, to clean up the system resources that it may have consumed. */
