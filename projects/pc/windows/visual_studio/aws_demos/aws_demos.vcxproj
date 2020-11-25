@@ -157,8 +157,8 @@
 		<ClInclude Include="..\..\..\..\..\libraries\logging\include\iot_logging_task.h"/>
 		<ClInclude Include="..\..\..\..\..\libraries\logging\include\logging_levels.h"/>
 		<ClInclude Include="..\..\..\..\..\libraries\logging\include\logging_stack.h"/>
-		<ClCompile Include="..\..\..\..\..\demos\device_defender_for_aws\report_builder.h"/>
-		<ClCompile Include="..\..\..\..\..\demos\device_defender_for_aws\metrics_collector.h"/>
+		<ClInclude Include="..\..\..\..\..\demos\device_defender_for_aws\report_builder.h"/>
+		<ClInclude Include="..\..\..\..\..\demos\device_defender_for_aws\metrics_collector.h"/>
 		<ClInclude Include="..\..\..\..\..\demos\dev_mode_key_provisioning\include\aws_dev_mode_key_provisioning.h"/>
 		<ClInclude Include="..\..\..\..\..\libraries\c_sdk\aws\defender\src\private\aws_iot_defender_internal.h"/>
 		<ClInclude Include="..\..\..\..\..\libraries\c_sdk\aws\defender\include\aws_iot_defender.h"/>
@@ -339,7 +339,7 @@
 		<ClCompile Include="..\..\..\..\..\libraries\freertos_plus\standard\freertos_plus_tcp\FreeRTOS_TCP_IP.c"/>
 		<ClCompile Include="..\..\..\..\..\libraries\freertos_plus\standard\freertos_plus_tcp\FreeRTOS_TCP_WIN.c"/>
 		<ClCompile Include="..\..\..\..\..\libraries\freertos_plus\standard\freertos_plus_tcp\FreeRTOS_UDP_IP.c"/>
-		<ClInclude Include="..\..\..\..\..\libraries\freertos_plus\standard\freertos_plus_tcp\tools\tcp_utilities\tcp_netstat.c"/>
+		<ClCompile Include="..\..\..\..\..\libraries\freertos_plus\standard\freertos_plus_tcp\tools\tcp_utilities\tcp_netstat.c"/>
 		<ClCompile Include="..\..\..\..\..\libraries\freertos_plus\standard\freertos_plus_tcp\portable\BufferManagement\BufferAllocation_2.c"/>
 		<ClCompile Include="..\..\..\..\..\libraries\freertos_plus\standard\freertos_plus_tcp\portable\NetworkInterface\WinPCap\NetworkInterface.c"/>
 		<ClCompile Include="..\..\..\..\..\libraries\freertos_plus\standard\tls\src\iot_tls.c"/>
