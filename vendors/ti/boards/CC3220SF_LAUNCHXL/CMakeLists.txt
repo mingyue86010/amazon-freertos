@@ -94,7 +94,7 @@ set(sysconfig_files_all
 file(MAKE_DIRECTORY ${sysconfig_out})
 
 # Setup SysConfig execution dependency
-add_custom_command(PRE_BUILD OUTPUT ${sysconfig_files_all}
+add_custom_command( OUTPUT ${sysconfig_files_all}
     COMMAND ${sysconfig_sh} --compiler ${compiler_str} --product
     "${simplelink_sdk_dir}/.metadata/product.json" --output ${sysconfig_out}
     ${syscfg_file}
@@ -244,6 +244,8 @@ target_include_directories(
       "${AFR_MODULES_ABSTRACTIONS_DIR}/common_io/test"
 )
 
+add_dependencies( AFR::common_io::mcu_port gen_sysconfig_files )
+
 # WiFi
 afr_mcu_port(wifi)
 target_sources(
@@ -280,9 +282,9 @@ target_include_directories(
     AFR::wifi::mcu_port BEFORE
     INTERFACE
       "${portable_dir}/posix"
-      "/Applications/ti/simplelink_cc32xx_sdk_4_30_00_06/source/ti/net"
-      "/Applications/ti/simplelink_cc32xx_sdk_4_30_00_06/source/ti/drivers/net/wifi"
-      "/Applications/ti/simplelink_cc32xx_sdk_4_30_00_06/source/ti/posix/gcc"
+      "${simplelink_sdk_dir}/source/ti/net"
+      "${simplelink_sdk_dir}/source/ti/drivers/net/wifi"
+      "${simplelink_sdk_dir}/source/ti/posix/gcc"
       "${simplelink_common_src_dir}/utils/network_if/${AFR_BOARD_NAME}"
 )
 
@@ -291,6 +293,7 @@ target_link_libraries(
     INTERFACE
         AFR::secure_sockets
 )
+add_dependencies( AFR::wifi::mcu_port gen_sysconfig_files )
 
 # PKCS11
 afr_mcu_port(pkcs11_implementation)
