@@ -94,7 +94,7 @@ set(sysconfig_files_all
 file(MAKE_DIRECTORY ${sysconfig_out})
 
 # Setup SysConfig execution dependency
-add_custom_command(OUTPUT ${sysconfig_files_all}
+add_custom_command(PRE_BUILD OUTPUT ${sysconfig_files_all}
     COMMAND ${sysconfig_sh} --compiler ${compiler_str} --product
     "${simplelink_sdk_dir}/.metadata/product.json" --output ${sysconfig_out}
     ${syscfg_file}
@@ -241,7 +241,7 @@ target_include_directories(
     INTERFACE
       ${compiler_specific_include}
       "${sysconfig_out}"
-      "${AFR_MODULES_ABSTRACTIONS_DIR}/common_io/include"
+      "${AFR_MODULES_ABSTRACTIONS_DIR}/common_io/test"
 )
 
 # WiFi
@@ -297,7 +297,7 @@ afr_mcu_port(pkcs11_implementation)
 target_sources(
     AFR::pkcs11_implementation::mcu_port
     INTERFACE
-        "${portable_dir}/pkcs11/iot_pkcs11_pal.c"
+        "${portable_dir}/pkcs11/core_pkcs11_pal.c"
 )
 target_link_libraries(
     AFR::pkcs11_implementation::mcu_port
