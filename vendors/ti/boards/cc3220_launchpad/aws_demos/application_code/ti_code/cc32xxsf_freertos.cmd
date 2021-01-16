@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2018-2020, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,11 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*
- *  ======== CC3220SF_LAUNCHXL.cmd ========
- */
 
 --stack_size=1024
---heap_size=0      /* minimize heap since we are using heap_4.c */
+--heap_size=0          /* minimize heap since we are using heap_4.c */
 --entry_point=resetISR
+--diag_suppress=10063  /* suppress warning about non _c_int00 entry point */
 
 /*
  * The starting address of the application.  Normally the interrupt vectors
@@ -50,6 +48,13 @@ MEMORY
     FLASH_HDR (RX)  : origin = 0x01000000, length = 0x7FF      /* 2 KB */
     FLASH     (RX)  : origin = 0x01000800, length = 0x0FF800   /* 1022KB */
     SRAM      (RWX) : origin = 0x20000000, length = 0x00040000 /* 256KB */
+    /* Explicitly placed off target for the storage of logging data.
+     * The data placed here is NOT loaded onto the target device.
+     * This is part of 1 GB of external memory from 0x60000000 - 0x9FFFFFFF.
+     * ARM memory map can be found here:
+     * https://developer.arm.com/documentation/ddi0337/e/memory-map/about-the-memory-map
+     */
+    LOG_DATA (R) : origin = 0x90000000, length = 0x40000
 }
 
 /* Section allocation in memory */
@@ -60,6 +65,7 @@ SECTIONS
     .text       : > FLASH
     .TI.ramfunc : {} load=FLASH, run=SRAM, table(BINIT)
     .const      : > FLASH
+    .rodata     : > FLASH
     .cinit      : > FLASH
     .pinit      : > FLASH
     .init_array : > FLASH
@@ -72,4 +78,6 @@ SECTIONS
     /* these sections are used by FreeRTOS */
     .resetVecs  : > FLASH_BASE
     .ramVecs    : > SRAM_BASE, type=NOLOAD
+
+    .log_data       :   > LOG_DATA, type = COPY
 }

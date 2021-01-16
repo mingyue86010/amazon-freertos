@@ -70,6 +70,9 @@ extern "C"
 #define SEC_TYPE_AP_MODE        SL_WLAN_SEC_TYPE_OPEN
 #define PASSWORD_AP_MODE        ""
 
+#define ERR_PRINT(x) UartTerm_Report("Error [%d] at line [%d] in function [%s]  \n\r",x,__LINE__,__FUNCTION__)
+
+
 /* Loop forever, user can change it as per application's requirement          */
 #define LOOP_FOREVER() \
             {\
@@ -124,7 +127,7 @@ typedef enum{
 
     /* If this bit is set: the device has acquired an IPv6 address.           */
     STATUS_BIT_IPV6L_ACQUIRED,
-    
+
     /* If this bit is set: the device has acquired an IPv6 address.           */
     STATUS_BIT_IPV6G_ACQUIRED,
     STATUS_BIT_AUTHENTICATION_FAILED,

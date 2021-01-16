@@ -33,7 +33,7 @@
 #ifndef __ASSEMBLER__
     #include "uart_term.h"
 #endif
-    #define UART_PRINT    Report
+    #define UART_PRINT    UartTerm_Report
 #endif
 
 /*-----------------------------------------------------------

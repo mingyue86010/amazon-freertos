@@ -6,10 +6,6 @@ aws_tests
 The aws_tests project is used to dispatch various test cases on the LaunchPad
 in order to verify the correctness of TI's port.
 
-The following test suites are currently supported:
-
- - common-io
-
 ## Prerequisites
 
 
@@ -117,7 +113,7 @@ cmake --build build/
 The output is located at `build/aws_tests.out`. To load the output using Uniflash,
 a binary version first has to be generated. Assuming `TI_CCS_PATH` was defined
 during the CMake step, a binary version `aws_tests.bin` should also be available
-in the `build` directory. 
+in the `build` directory.
 
 ## Hardware setup
 
@@ -134,7 +130,7 @@ Mount jumper to connect P53 and P63.
 
 SCL at P1 and SDA at P2.
 
-The vendor/ti/simplelink_common/common_io/CC3220SF_LAUNCXHL/iot_test_common_io_internal.c 
+The vendor/ti/simplelink_common/common_io/CC3220SF_LAUNCXHL/iot_test_common_io_internal.c
 file specifies the device address and register to verify functionality against.
 
 ### SPI:
@@ -161,7 +157,7 @@ driver. Jumper mounted to connect P64 and P50.
 ## Running the tests
 
 Once the binary is flashed the tests will run by default. To view the results,
-open a serial terminal like PuTTY and open the COM port assigned to the 
+open a serial terminal like PuTTY and open the COM port assigned to the
 launchpad:
 
 1. Open [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)

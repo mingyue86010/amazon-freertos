@@ -187,11 +187,15 @@ target_include_directories(
     AFR::kernel::mcu_port
     INTERFACE
         "${simplelink_sdk_dir}/source"
+        ${sysconfig_out}
+        "${simplelink_common_src_dir}/utils/uart_term"
         "${board_dir}/config_files"
         # Need aws_clientcredential.h
         "$<IF:${AFR_IS_TESTING},${AFR_TESTS_DIR},${AFR_DEMOS_DIR}>/include"
         ${compiler_specific_include}
 )
+
+add_dependencies( AFR::kernel::mcu_port gen_sysconfig_files )
 
 #POSIX
 afr_mcu_port(posix)
@@ -335,7 +339,6 @@ target_link_libraries(
 
 set(CMAKE_EXECUTABLE_SUFFIX ".out")
 
-afr_glob_src(board_code_src DIRECTORY "${board_dir}/application_code/ti_code")
 afr_glob_src(config_files DIRECTORY "${board_dir}/config_files")
 
 # Do not add demos or tests if they're turned off.
@@ -344,7 +347,6 @@ if(AFR_ENABLE_DEMOS OR AFR_ENABLE_TESTS)
         ${exe_target}
         ${sysconfig_files_drivers}
         #${sysconfig_files_wifi}
-        ${board_code_src}
         ${config_files}
         "${simplelink_common_src_dir}/utils/uart_term/uart_term.c"
         "${board_dir}/application_code/main.c"
@@ -352,7 +354,6 @@ if(AFR_ENABLE_DEMOS OR AFR_ENABLE_TESTS)
     target_include_directories(
         ${exe_target}
         PRIVATE
-            "${simplelink_common_src_dir}/utils/uart_term"
             "${sysconfig_out}"
     )
     target_link_libraries(
