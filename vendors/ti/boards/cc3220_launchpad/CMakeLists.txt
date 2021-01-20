@@ -37,7 +37,7 @@
 # -------------------------------------------------------------------------------------------------
 
 # Set common variables
-set(simplelink_sdk_dir "${AFR_VENDORS_DIR}/ti/simplelink_cc32xx_sdk/${CC32XX_SDK_VER}")
+set(simplelink_sdk_dir "${AFR_VENDORS_DIR}/ti/SimpleLink_CC32xx/v4_30_00_06")
 set(simplelink_common_src_dir "${AFR_VENDORS_DIR}/ti/simplelink_common/")
 set(portable_dir "${CMAKE_CURRENT_LIST_DIR}/ports")
 set(board_demos_dir "${CMAKE_CURRENT_LIST_DIR}/aws_demos")
@@ -195,32 +195,6 @@ target_include_directories(
 )
 
 add_dependencies( AFR::kernel::mcu_port gen_sysconfig_files )
-
-#POSIX
-afr_mcu_port(posix)
-target_sources(
-    AFR::posix::mcu_port
-    INTERFACE "${portable_dir}/posix/FreeRTOS_POSIX_portable.h"
-)
-target_include_directories(
-    AFR::posix::mcu_port BEFORE
-    INTERFACE
-        "${portable_dir}/posix"
-)
-
-target_link_libraries(
-    AFR::posix::mcu_port
-    INTERFACE
-        AFR::freertos_plus_posix
-        AFR::posix
-)
-
-target_compile_definitions(
-    AFR::posix::mcu_port
-    INTERFACE
-        _SYS_TYPES_H
-        _STDIO_H_
-)
 
 # Common I/O, currently only fully supported for GCC
 afr_mcu_port(common_io)
