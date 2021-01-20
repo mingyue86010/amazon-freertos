@@ -169,7 +169,6 @@ afr_mcu_port(kernel)
 target_sources(
     AFR::kernel::mcu_port
     INTERFACE
-        "${CMAKE_CURRENT_LIST_DIR}/CC3220SF.ccxml"
         "${simplelink_sdk_dir}/kernel/freertos/dpl/ClockP_freertos.c"
         "${simplelink_sdk_dir}/kernel/freertos/dpl/DebugP_freertos.c"
         "${simplelink_sdk_dir}/kernel/freertos/dpl/HwiPCC32XX_freertos.c"
@@ -245,7 +244,7 @@ target_include_directories(
     INTERFACE
       ${compiler_specific_include}
       "${sysconfig_out}"
-      "${AFR_MODULES_ABSTRACTIONS_DIR}/common_io/test"
+      "$<IF:${AFR_IS_TESTING},${AFR_MODULES_ABSTRACTIONS_DIR}/common_io/test,>"
 )
 
 add_dependencies( AFR::common_io::mcu_port gen_sysconfig_files )
@@ -277,9 +276,8 @@ target_sources(
 
 # WiFi on TI requires POSIX types
 target_include_directories(
-    AFR::wifi::mcu_port BEFORE
+    AFR::wifi::mcu_port
     INTERFACE
-      "${portable_dir}/posix"
       "${compiler_posix_includes}"
       "${simplelink_sdk_dir}/source/ti/net"
       "${simplelink_sdk_dir}/source/ti/drivers/net/wifi"
@@ -291,6 +289,7 @@ target_link_libraries(
     INTERFACE
         AFR::secure_sockets
 )
+
 add_dependencies( AFR::wifi::mcu_port gen_sysconfig_files )
 
 # PKCS11
