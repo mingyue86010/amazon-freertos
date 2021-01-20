@@ -541,12 +541,12 @@ long Network_IF_ConnectAP( char * pcSsid,
                 UART_PRINT( "\n\r\n\rPlease enter the AP(open) SSID name # " );
 
                 /* Get the AP name to connect over the UART                       */
-                lRetVal = GetCmd( acCmdStore, sizeof( acCmdStore ) );
+                lRetVal = UartTerm_GetCmd( acCmdStore, sizeof( acCmdStore ) );
 
                 if( lRetVal > 0 )
                 {
                     /* remove start/end spaces if any                             */
-                    lRetVal = TrimSpace( acCmdStore );
+                    lRetVal = UartTerm_TrimSpace( acCmdStore );
 
                     if( lRetVal )
                     {

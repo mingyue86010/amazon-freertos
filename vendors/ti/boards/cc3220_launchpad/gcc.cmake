@@ -26,10 +26,15 @@ set(linker_flags
 #   --diag_suppress=10063
 #)
 
+set( compiler_posix_includes
+    "${simplelink_sdk_dir}/source/ti/posix/gcc"
+    )
+
 set(link_dependent_libs
     "${simplelink_sdk_dir}/source/ti/devices/cc32xx/driverlib/gcc/Release/driverlib.a"
-    "${simplelink_sdk_dir}/source/ti/drivers/lib/drivers_cc32xx.am4g"
     "${simplelink_sdk_dir}/source/ti/drivers/net/wifi/gcc/rtos/simplelink.a"
+    "${simplelink_sdk_dir}/source/ti/net/lib/gcc/m4/slnetsock_release.a"
+    "${simplelink_sdk_dir}/source/ti/drivers/lib/drivers_cc32xx.am4g"
 )
 
 # -------------------------------------------------------------------------------------------------

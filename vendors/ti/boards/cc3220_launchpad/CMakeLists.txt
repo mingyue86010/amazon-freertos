@@ -255,12 +255,7 @@ afr_mcu_port(wifi)
 target_sources(
     AFR::wifi::mcu_port
     INTERFACE
-        "${simplelink_sdk_dir}/source/ti/net/slnetconn.c"
-        "${simplelink_sdk_dir}/source/ti/net/slnetif.c"
-        "${simplelink_sdk_dir}/source/ti/net/slnetsock.c"
-        "${simplelink_sdk_dir}/source/ti/net/slnetutils.c"
-        "${simplelink_sdk_dir}/source/ti/drivers/net/wifi/slnetif/slwificonn.c"
-        "${simplelink_sdk_dir}/source/ti/drivers/net/wifi/slnetif/slnetifwifi.c"
+        "${portable_dir}/wifi/iot_wifi.c"
         "${simplelink_common_src_dir}/utils/network_if/${AFR_BOARD_NAME}/network_if.c"
         "${sysconfig_files_wifi}"
 
@@ -278,7 +273,6 @@ target_sources(
         "${simplelink_sdk_dir}/source/ti/posix/freertos/sleep.c"
         "${simplelink_sdk_dir}/source/ti/posix/freertos/semaphore.c"
         "${simplelink_sdk_dir}/source/ti/posix/freertos/timer.c"
-        "${portable_dir}/wifi/iot_wifi.c"
 )
 
 # WiFi on TI requires POSIX types
@@ -286,9 +280,9 @@ target_include_directories(
     AFR::wifi::mcu_port BEFORE
     INTERFACE
       "${portable_dir}/posix"
+      "${compiler_posix_includes}"
       "${simplelink_sdk_dir}/source/ti/net"
       "${simplelink_sdk_dir}/source/ti/drivers/net/wifi"
-      "${simplelink_sdk_dir}/source/ti/posix/gcc"
       "${simplelink_common_src_dir}/utils/network_if/${AFR_BOARD_NAME}"
 )
 
@@ -346,7 +340,7 @@ if(AFR_ENABLE_DEMOS OR AFR_ENABLE_TESTS)
     add_executable(
         ${exe_target}
         ${sysconfig_files_drivers}
-        #${sysconfig_files_wifi}
+        ${board_code_src}
         ${config_files}
         "${simplelink_common_src_dir}/utils/uart_term/uart_term.c"
         "${board_dir}/application_code/main.c"

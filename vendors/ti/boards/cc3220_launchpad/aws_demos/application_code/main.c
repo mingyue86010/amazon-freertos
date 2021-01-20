@@ -65,8 +65,6 @@
 #include <ti/drivers/SPI.h>
 #include <ti/drivers/net/wifi/simplelink.h>
 
-/* CC3220SF board file. */
-#include "Board.h"
 
 /* Logging Task Defines. */
 #define mainLOGGING_MESSAGE_QUEUE_LENGTH    ( 15 )
@@ -101,6 +99,10 @@ int main( void )
 {
     /* Call board init functions. */
     Board_initGeneral();
+    /* Configure the UART. */
+    ( void ) UartTerm_Init();
+    GPIO_init();
+    SPI_init();
 
     /* Start logging task. */
     xLoggingTaskInitialize( mainLOGGING_TASK_STACK_SIZE,
@@ -123,21 +125,8 @@ int main( void )
  */
 void vApplicationDaemonTaskStartupHook( void )
 {
-    UART_Handle xtUartHndl;
-
-    /* Hardware initialization required after the RTOS is running. */
-    GPIO_init();
-    SPI_init();
-
-    /* Configure the UART. */
-    xtUartHndl = InitTerm();
-    UART_control( xtUartHndl, UART_CMD_RXDISABLE, NULL );
-
-    // Emit some serial port debugging
+    /* Emit some serial port debugging */
     vTaskDelay( mainLOGGING_WIFI_STATUS_DELAY );
-
-
-
 
     /* Initialize the AWS Libraries system. */
     if( SYSTEM_Init() == pdPASS )
