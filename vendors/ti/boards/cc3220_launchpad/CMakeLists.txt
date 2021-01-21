@@ -37,28 +37,15 @@
 # -------------------------------------------------------------------------------------------------
 
 # Set common variables
-set(simplelink_sdk_dir "${AFR_VENDORS_DIR}/ti/SimpleLink_CC32xx/v4_30_00_06")
+set(simplelink_sdk_dir "${AFR_VENDORS_DIR}/ti/simplelink_cc32xx_sdk/${CC32XX_SDK_VER}")
 set(simplelink_common_src_dir "${AFR_VENDORS_DIR}/ti/simplelink_common/")
 set(portable_dir "${CMAKE_CURRENT_LIST_DIR}/ports")
 set(board_demos_dir "${CMAKE_CURRENT_LIST_DIR}/aws_demos")
 set(board_tests_dir "${CMAKE_CURRENT_LIST_DIR}/aws_tests")
 
-# Set SysConfig script path based on OS
-if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
-    set(sysconfig_sh "${AFR_VENDORS_DIR}/ti/sysconfig/${SYSCONFIG_VER}/sysconfig_cli.sh")
-elseif (CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
-    set(sysconfig_sh "${AFR_VENDORS_DIR}/ti/sysconfig/${SYSCONFIG_VER}/sysconfig_cli.sh")
-else()
-    # If not Linux or macOS, assume Windows. The actual "true" variable could
-    # for example be WIN32, MINGWm MSYS or CYGWIN depending on the Windows
-    # environment used.
-    set(sysconfig_sh "${AFR_VENDORS_DIR}/ti/sysconfig/${SYSCONFIG_VER}/sysconfig_cli.bat")
-endif()
-
 if(AFR_IS_TESTING)
     set(board_dir "${board_tests_dir}")
     set(syscfg_file "${board_dir}/application_code/ti_code/aws_tests.syscfg")
-    set(sysconfig_out "${CMAKE_BINARY_DIR}/sysconfig_output/aws_tests")
     set(exe_target aws_tests)
 else()
     set(board_dir "${board_demos_dir}")
@@ -71,36 +58,64 @@ endif()
 if(${AFR_TOOLCHAIN} STREQUAL "arm-gcc")
     include("${CMAKE_CURRENT_LIST_DIR}/gcc.cmake")
     set(compiler_str "gcc")
-    #include_directories(BEFORE "${simplelink_sdk_dir}/source/ti/posix/gcc")
 elseif(NOT AFR_METADATA_MODE)
     message( FATAL_ERROR "The toolchain is not supported." )
 endif()
 
-# Group SysConfig files to avoid making common-io and wifi dependent
-set(sysconfig_files_wifi
-    "${sysconfig_out}/ti_drivers_net_wifi_config.c"
-    "${sysconfig_out}/ti_net_config.c"
-)
-set(sysconfig_files_drivers
-    "${sysconfig_out}/ti_drivers_config.c"
-)
-set(sysconfig_files_all
-    "${sysconfig_files_wifi}"
-    "${sysconfig_files_drivers}"
-)
+# Set SysConfig script path based on OS
+if(DEFINED SYSCONFIG_VER)
+    if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+        set(sysconfig_sh "${AFR_VENDORS_DIR}/ti/sysconfig/${SYSCONFIG_VER}/sysconfig_cli.sh")
+    elseif (CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+        set(sysconfig_sh "${AFR_VENDORS_DIR}/ti/sysconfig/${SYSCONFIG_VER}/sysconfig_cli.sh")
+    else()
+        # If not Linux or macOS, assume Windows. The actual "true" variable could
+        # for example be WIN32, MINGWm MSYS or CYGWIN depending on the Windows
+        # environment used.
+        set(sysconfig_sh "${AFR_VENDORS_DIR}/ti/sysconfig/${SYSCONFIG_VER}/sysconfig_cli.bat")
+    endif()
 
-# Create SysConfig generation folder if it does not already exist
-# This to avoid CMake complaining on projects including non-existing locations
-file(MAKE_DIRECTORY ${sysconfig_out})
+    # Group SysConfig files to avoid making common-io and wifi dependent
+    set(sysconfig_out "${CMAKE_BINARY_DIR}/sysconfig_output/aws_tests")
+    set(sysconfig_files_wifi
+        "${sysconfig_out}/ti_drivers_net_wifi_config.c"
+        "${sysconfig_out}/ti_net_config.c"
+    )
+    set(sysconfig_files_drivers
+        "${sysconfig_out}/ti_drivers_config.c"
+    )
+    set(sysconfig_files_all
+        "${sysconfig_files_wifi}"
+        "${sysconfig_files_drivers}"
+    )
 
-# Setup SysConfig execution dependency
-add_custom_command( OUTPUT ${sysconfig_files_all}
-    COMMAND ${sysconfig_sh} --compiler ${compiler_str} --product
-    "${simplelink_sdk_dir}/.metadata/product.json" --output ${sysconfig_out}
-    ${syscfg_file}
-    DEPENDS ${syscfg_file}
-)
-add_custom_target(gen_sysconfig_files DEPENDS ${sysconfig_files_all})
+    # Create SysConfig generation folder if it does not already exist
+    # This to avoid CMake complaining on projects including non-existing locations
+    file(MAKE_DIRECTORY ${sysconfig_out})
+
+    # Setup SysConfig execution dependency
+    add_custom_command( OUTPUT ${sysconfig_files_all}
+        COMMAND ${sysconfig_sh} --compiler ${compiler_str} --product
+        "${simplelink_sdk_dir}/.metadata/product.json" --output ${sysconfig_out}
+        ${syscfg_file}
+        DEPENDS ${syscfg_file}
+    )
+    add_custom_target(gen_sysconfig_files DEPENDS ${sysconfig_files_all})
+else()
+    set(sysconfig_out "${board_dir}/application_code/ti_code")
+    set(sysconfig_files_wifi
+        "${board_dir}/application_code/ti_code/ti_drivers_net_wifi_config.c"
+        "${board_dir}/application_code/ti_code/ti_net_config.c"
+    )
+    set(sysconfig_files_drivers
+        "${board_dir}/application_code/ti_code/ti_drivers_config.c"
+    )
+    set(sysconfig_files_all
+        "${sysconfig_files_wifi}"
+        "${sysconfig_files_drivers}"
+    )
+endif()
+
 
 # -------------------------------------------------------------------------------------------------
 # FreeRTOS Console metadata
