@@ -45,12 +45,9 @@ set(board_tests_dir "${CMAKE_CURRENT_LIST_DIR}/aws_tests")
 
 if(AFR_IS_TESTING)
     set(board_dir "${board_tests_dir}")
-    set(syscfg_file "${board_dir}/application_code/ti_code/aws_tests.syscfg")
     set(exe_target aws_tests)
 else()
     set(board_dir "${board_demos_dir}")
-    set(syscfg_file "${board_dir}/application_code/ti_code/aws_demos.syscfg")
-    set(sysconfig_out "${CMAKE_BINARY_DIR}/sysconfig_output/aws_demos")
     set(exe_target aws_demos)
 endif()
 
@@ -62,59 +59,22 @@ elseif(NOT AFR_METADATA_MODE)
     message( FATAL_ERROR "The toolchain is not supported." )
 endif()
 
-# Set SysConfig script path based on OS
-if(DEFINED SYSCONFIG_VER)
-    if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
-        set(sysconfig_sh "${AFR_VENDORS_DIR}/ti/sysconfig/${SYSCONFIG_VER}/sysconfig_cli.sh")
-    elseif (CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
-        set(sysconfig_sh "${AFR_VENDORS_DIR}/ti/sysconfig/${SYSCONFIG_VER}/sysconfig_cli.sh")
-    else()
-        # If not Linux or macOS, assume Windows. The actual "true" variable could
-        # for example be WIN32, MINGWm MSYS or CYGWIN depending on the Windows
-        # environment used.
-        set(sysconfig_sh "${AFR_VENDORS_DIR}/ti/sysconfig/${SYSCONFIG_VER}/sysconfig_cli.bat")
-    endif()
-
-    # Group SysConfig files to avoid making common-io and wifi dependent
-    set(sysconfig_out "${CMAKE_BINARY_DIR}/sysconfig_output/aws_tests")
-    set(sysconfig_files_wifi
-        "${sysconfig_out}/ti_drivers_net_wifi_config.c"
-        "${sysconfig_out}/ti_net_config.c"
-    )
-    set(sysconfig_files_drivers
-        "${sysconfig_out}/ti_drivers_config.c"
-    )
-    set(sysconfig_files_all
-        "${sysconfig_files_wifi}"
-        "${sysconfig_files_drivers}"
-    )
-
-    # Create SysConfig generation folder if it does not already exist
-    # This to avoid CMake complaining on projects including non-existing locations
-    file(MAKE_DIRECTORY ${sysconfig_out})
-
-    # Setup SysConfig execution dependency
-    add_custom_command( OUTPUT ${sysconfig_files_all}
-        COMMAND ${sysconfig_sh} --compiler ${compiler_str} --product
-        "${simplelink_sdk_dir}/.metadata/product.json" --output ${sysconfig_out}
-        ${syscfg_file}
-        DEPENDS ${syscfg_file}
-    )
-    add_custom_target(gen_sysconfig_files DEPENDS ${sysconfig_files_all})
-else()
-    set(sysconfig_out "${board_dir}/application_code/ti_code")
-    set(sysconfig_files_wifi
-        "${board_dir}/application_code/ti_code/ti_drivers_net_wifi_config.c"
-        "${board_dir}/application_code/ti_code/ti_net_config.c"
-    )
-    set(sysconfig_files_drivers
-        "${board_dir}/application_code/ti_code/ti_drivers_config.c"
-    )
-    set(sysconfig_files_all
-        "${sysconfig_files_wifi}"
-        "${sysconfig_files_drivers}"
-    )
-endif()
+# These files were generated from the Sysconfig file found in ${board_dir}/application_code/ti_code.
+# To regenerate them, the bash/bat script provided with Sysconfig can be executed like so
+# ${sysconfig_sh} --compiler ${compiler_str} --product ${simplelink_sdk_dir}/.metadata/product.json --output ${sysconfig_out}
+# in order to generate new driver files from the modified Sysconfig.
+set(sysconfig_out "${board_dir}/application_code/ti_code")
+set(sysconfig_files_wifi
+    "${board_dir}/application_code/ti_code/ti_drivers_net_wifi_config.c"
+    "${board_dir}/application_code/ti_code/ti_net_config.c"
+)
+set(sysconfig_files_drivers
+    "${board_dir}/application_code/ti_code/ti_drivers_config.c"
+)
+set(sysconfig_files_all
+    "${sysconfig_files_wifi}"
+    "${sysconfig_files_drivers}"
+)
 
 
 # -------------------------------------------------------------------------------------------------
@@ -136,11 +96,8 @@ afr_set_board_metadata(IDE_CCS_COMPILER "GCC")
 afr_set_board_metadata(IS_ACTIVE "TRUE")
 afr_set_board_metadata(KEY_IMPORT_PROVISIONING "TRUE")
 
-## These projects need to be updated in a way that allows for easy SDK
-## versioning. Remove them from metadata in the meanwhile.
-#afr_set_board_metadata(IDE_CCS_PROJECT_LOCATION "${AFR_ROOT_DIR}/projects/ti/cc3220_launchpad/ccs/aws_demos")
-#afr_set_board_metadata(IDE_IAR_PROJECT_LOCATION "${AFR_ROOT_DIR}/projects/ti/cc3220_launchpad/iar/aws_demos")
-
+afr_set_board_metadata(IDE_CCS_PROJECT_LOCATION "${AFR_ROOT_DIR}/projects/ti/cc3220_launchpad/ccs/aws_demos")
+afr_set_board_metadata(IDE_IAR_PROJECT_LOCATION "${AFR_ROOT_DIR}/projects/ti/cc3220_launchpad/iar/aws_demos")
 afr_set_board_metadata(AWS_DEMOS_CONFIG_FILES_LOCATION "${CMAKE_CURRENT_LIST_DIR}/aws_demos/config_files")
 
 # -------------------------------------------------------------------------------------------------
