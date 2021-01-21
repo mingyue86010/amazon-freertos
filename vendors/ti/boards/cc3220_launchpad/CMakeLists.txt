@@ -37,7 +37,7 @@
 # -------------------------------------------------------------------------------------------------
 
 # Set common variables
-set(simplelink_sdk_dir "${AFR_VENDORS_DIR}/ti/simplelink_cc32xx_sdk/${CC32XX_SDK_VER}")
+set(simplelink_sdk_dir "${AFR_VENDORS_DIR}/ti/SimpleLink_CC32xx/v4_30_00_06")
 set(simplelink_common_src_dir "${AFR_VENDORS_DIR}/ti/simplelink_common/")
 set(portable_dir "${CMAKE_CURRENT_LIST_DIR}/ports")
 set(board_demos_dir "${CMAKE_CURRENT_LIST_DIR}/aws_demos")

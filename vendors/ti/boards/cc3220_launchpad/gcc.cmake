@@ -31,6 +31,7 @@ set( compiler_posix_includes
     )
 
 set(link_dependent_libs
+    "${simplelink_sdk_dir}/source/third_party/spiffs/lib/gcc/m4/spiffs.a"
     "${simplelink_sdk_dir}/source/ti/devices/cc32xx/driverlib/gcc/Release/driverlib.a"
     "${simplelink_sdk_dir}/source/ti/drivers/net/wifi/gcc/rtos/simplelink.a"
     "${simplelink_sdk_dir}/source/ti/net/lib/gcc/m4/slnetsock_release.a"
