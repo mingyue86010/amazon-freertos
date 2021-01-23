@@ -81,6 +81,7 @@ struct timeval {
 #endif
 
 #else
+#error "Tried to include ccs posix."
 #include <../include/sys/_timeval.h>
 #endif
 
