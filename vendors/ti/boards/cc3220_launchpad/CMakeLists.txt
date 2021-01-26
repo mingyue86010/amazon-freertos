@@ -189,6 +189,7 @@ target_sources(
 target_include_directories(
     AFR::common_io::mcu_port
     INTERFACE
+      ${compiler_posix_includes}
       ${compiler_specific_include}
       "${sysconfig_out}"
       "$<IF:${AFR_IS_TESTING},${AFR_MODULES_ABSTRACTIONS_DIR}/common_io/test,>"

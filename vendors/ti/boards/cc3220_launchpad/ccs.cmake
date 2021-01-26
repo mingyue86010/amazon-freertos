@@ -17,18 +17,13 @@ set(assembler_flags ${compiler_flags})
 # The start-group flag is needed because some of the link_dependent_libs depend
 # on the CMake built kernel, so the link order can't be configured.
 set(linker_flags
-    -march=armv7e-m -mthumb -mfloat-abi=soft -mfpu=fpv4-sp-d16 -nostartfiles -static -Wl,--gc-sections -lgcc -lc -lm -lnosys --specs=nano.specs --specs=nosys.specs -Wl,--start-group
+    --heap_size=0x0 --stack_size=0x518
+    --warn_sections --rom_model --reread_libs
+    --diag_suppress=10063
 )
-
-#set(linker_flags
-#    --heap_size=0x0 --stack_size=0x518
-#    --warn_sections --rom_model --reread_libs
-#    --diag_suppress=10063
-#)
 
 set( compiler_posix_includes
     "${simplelink_sdk_dir}/source/ti/posix/ccs"
-    "${simplelink_sdk_dir}/source/ti/posix/ccs/sys"
 )
 set(link_dependent_libs
     "${simplelink_sdk_dir}/source/third_party/spiffs/lib/ccs/m4/spiffs.a"
@@ -67,8 +62,6 @@ set(compiler_specific_src
 
 set(compiler_specific_include
     "${AFR_KERNEL_DIR}/portable/CCS/ARM_CM3"
-    "${simplelink_sdk_dir}/source/ti/posix/ccs"
-    "${simplelink_sdk_dir}/source/ti/posix/ccs/sys"
 )
 
 # -------------------------------------------------------------------------------------------------
